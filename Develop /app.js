@@ -10,6 +10,86 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const employeeType = [
+    {
+        type: "list",
+        name: "role",
+        choices:["Manager" , "Engineer" ,  "Intern"],
+        message: "What kind of employee do you want to create?",
+      },
+    ]
+    const managerQuestions = [
+        {
+            name:"name",
+            type: "input",
+            message:"What is the employee's name?"
+        },
+        {
+            name: "id",
+            type: "input",
+            message:"what is the employee's id?"
+        },
+        {
+            name: "email",
+            type: "input",
+            message:"what is the employee's email?"
+        },
+        {
+            name: "officeNumber",
+            type: "input",
+            message:"what is the employee's officeNumber?"
+        },
+
+    ]
+    const engineerQuestions = [
+        {
+            name:"name",
+            type: "input",
+            message:"What is the employee's name?"
+        },
+        {
+            name: "id",
+            type: "input",
+            message:"what is the employee's id?"
+        },
+        {
+            name: "email",
+            type: "input",
+            message:"what is the employee's email?"
+        },
+        {
+            name: "github",
+            type: "input",
+            message:"what is the employee's github?"
+        },
+
+    ]
+    const internQuestions = [
+        {
+            name:"name",
+            type: "input",
+            message:"What is the employee's name?"
+        },
+        {
+            name: "id",
+            type: "input",
+            message:"what is the employee's id?"
+        },
+        {
+            name: "email",
+            type: "input",
+            message:"what is the employee's email?"
+        },
+        {
+            name: "school",
+            type: "input",
+            message:"what is the employee's school?"
+        },
+
+    ]
+    
+    
+
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
@@ -33,3 +113,27 @@ const render = require("./lib/htmlRenderer");
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
+function init(){
+    let role;
+
+    inquirer.prompt(employeeType)
+    .then(function(answers){
+        role = answers.role;
+        if(answers.role === "Manager"){
+            return inquirer.prompt(managerQuestions);
+        }
+        else if (answers.role === "Engineer"){
+            return inquirer.prompt(engineerQuestions);
+        }
+        else if(answers.role === "Intern"){
+            return inquirer.prompt(internQuestions);
+        }
+    })
+    .then(function(answers){
+        let employee;
+        if(role === "Manager"){
+            employee = new Manager(answers.id, answers.name, answers.email,answers.officeNumber);
+        }
+    })
+}
+init();
