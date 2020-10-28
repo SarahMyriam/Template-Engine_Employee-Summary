@@ -5,6 +5,7 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
+//need to link to other files!
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
@@ -113,6 +114,9 @@ const employeeType = [
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
+
+const input = [];
+
 function init(){
     let role;
 
@@ -132,8 +136,32 @@ function init(){
     .then(function(answers){
         let employee;
         if(role === "Manager"){
-            employee = new Manager(answers.id, answers.name, answers.email,answers.officeNumber);
+            employee = new Manager(answers.name, answers.id, answers.email,answers.officeNumber);
         }
+        else if(role === "Engineer"){
+            employee = new Engineer( answers.name, answers.id, answers.email, answers.github);
+        }
+        else if(role === "Intern"){
+            employee = new Intern( answers.name, answers.id, answers.email, answers.school);
+        }
+        //prompting user again
+        input.push(employee);
+        return inquirer.prompt([{
+            name:"continue", type:"confirm", message:"would you like to add another employee?"
+
+        }])
+    })
+    //if confirm to continue, call the functing again using init
+    .then(function(answers){
+        if (answers.continue){
+            return init();
+        }
+        else{
+            //return render(input);
+            var html = render(input);
+            fs.writeFileSync(outputPath, html,"UTF-8");
+        }
+        console.log(input);
     })
 }
 init();
